@@ -5,18 +5,19 @@ This simple Node.js / express based proxy allows your application to call servic
 
 ## Installation
 
-    - Clone this repository
-    - Install npm dependencies
+- Clone this repository
+- Install npm dependencies
+
+    ```
+    npm install
+    ```
     
-        ```
-        npm install
-        ```
     
-    - Start the server
+- Start the server
          
-         ```
-         node server
-         ```
+     ```
+     node server
+     ```
 
 ## Usage
 
