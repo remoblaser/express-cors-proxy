@@ -1,7 +1,6 @@
 const express = require('express'),
   request = require('request'),
   bodyParser = require('body-parser'),
-  url = require('url'),
   app = express();
 
 app.use(bodyParser.json());
@@ -14,21 +13,17 @@ app.all('*', function (req, res, next) {
   if (req.method === 'OPTIONS') {
     console.log('Allowing CORS for ' + req.url)
     res.send();
+    return;
   } else {
-    let query = url.parse(req.url,true).query;
-    let targetURL = query.target;
-    if (!targetURL) {
+    let apiEndpoint = req.url;
+    let apiRoot = req.headers.target;
+    if (!apiRoot) {
       res.send(500, { error: 'There is no target in the request' });
       return;
     }
 
-    console.log('Proxying request to ' + targetURL);
-    request({ url: targetURL, method: req.method, json: req.body },
-      function (error, response, body) {
-        if (error) {
-          console.error(response)
-        }
-      }).pipe(res);
+    console.log('Proxying request to ' + apiRoot + apiEndpoint);
+    request({ url: apiRoot + apiEndpoint, method: req.method, json: req.body, headers: { "connection": "keep-alive" } }).pipe(res);
   }
 });
 
