@@ -23,7 +23,8 @@ app.all('*', function (req, res, next) {
     }
 
     console.log('Proxying request to ' + apiRoot + apiEndpoint);
-    request({ url: apiRoot + apiEndpoint, method: req.method, json: req.body, headers: { "connection": "keep-alive" } }).pipe(res);
+    let auth = req.headers.authorization
+    request({ url: apiRoot + apiEndpoint, method: req.method, json: req.body, headers: {"Authorization": auth, "connection": "keep-alive" } }).pipe(res);
   }
 });
 
