@@ -6,9 +6,10 @@ const express = require('express'),
 app.use(bodyParser.json());
 
 app.all('*', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", req.header('origin'));
   res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
   res.header("Access-Control-Allow-Headers", req.header('access-control-request-headers'));
+  res.header("Access-Control-Allow-Credentials", true)
 
   if (req.method === 'OPTIONS') {
     console.log('Allowing CORS for ' + req.url)
@@ -24,8 +25,7 @@ app.all('*', function (req, res, next) {
 
     console.log('Proxying request to ' + apiRoot + apiEndpoint);
     let auth = req.headers.authorization
-    console.log(req.headers)
-    request({ url: apiRoot + apiEndpoint, method: req.method, json: req.body, headers: {"Authorization": auth, "connection": "keep-alive" } }).pipe(res);
+    request({ url: apiRoot + apiEndpoint, method: req.method, json: req.body, headers: {"Authorization": auth, "connection": "keep-alive", "Cookie": req.headers.cookie } }).pipe(res);
   }
 });
 
