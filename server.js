@@ -25,7 +25,7 @@ app.all('*', function (req, res, next) {
 
     console.log('Proxying request to ' + apiRoot + apiEndpoint);
     let auth = req.headers.authorization
-    request({ url: apiRoot + apiEndpoint, method: req.method, json: req.body, headers: {"Authorization": auth, "connection": "keep-alive", "Cookie": req.headers.cookie } }).pipe(res);
+    request({rejectUnauthorized: false,  url: apiRoot + apiEndpoint, method: req.method, json: req.body, headers: {"Authorization": auth, "connection": "keep-alive", "Cookie": req.headers.cookie } }).pipe(res)
   }
 });
 
